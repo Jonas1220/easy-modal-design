@@ -12,10 +12,10 @@ Say goodbye to tedious coding and hello to effortless modal window creation. Eas
 
 ## Usage
 
-Create you modal with settings on the page. After creating it, you can 
+Create you modal with settings on the page. After creating it, you can copy all the code you need to use the modal. 
 
 ## More
 
-If you like my work pleaase support me: [Donate](https://donate.stripe.com/dR66q0b9D3A4g8MfZ0)
+If you like my work please support me: [Donate](https://donate.stripe.com/dR66q0b9D3A4g8MfZ0)
 
 Of follow me on twitter: [@jonaskaatz](https://twitter.com/jonaskaatz)
