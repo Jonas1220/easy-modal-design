@@ -1,6 +1,5 @@
-
 import './App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Slider from '@mui/material/Slider';
 import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
@@ -14,23 +13,45 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // import {Stripe} from 'stripe';
 // const stripe = Stripe('sk_test_51NPT4wIDg5lCMJRBAXalOyqsipxOSggg9jtim3xHpJSD8J9kGDyroZ3YJPE12TWTh9jeyLTXoVrud3vAGw5VJbcK00VO0Qaaqm');
+/*
+'sm': '640px',
+'md': '768px',
+'lg': '1024px',
+*/
 
 function App() {
-    const [btnText, setBtnText] = useState('copy');
+    const [btnText,setBtnText]=useState('copy');
     // SECTION: Basics
-    const [modalWidth, setModalWidth] = useState(50);
-    const [colorBackground, setColorBackground] = useState("#ffffff");
-    const [borderRadius, setBorderRadius] = useState(0);
-    const [borderThickness, setBorderThickness] = useState(1);
-    const [colorBorder, setColorBorder] = useState("#888888");
-    const [padding, setPadding] = useState(20);
+    const [chooseBreakpoint,setChooseBreakpoint]=useState(1024);
+    const [modalWidthSmall,setModalWidthSmall]=useState(90);
+    const [modalWidthMedium,setModalWidthMedium]=useState(70);
+    const [modalWidthLarge,setModalWidthLarge]=useState(50);
+    const [colorBackground,setColorBackground]=useState("#ffffff");
+    const [borderRadius,setBorderRadius]=useState(0);
+    const [borderThickness,setBorderThickness]=useState(1);
+    const [colorBorder,setColorBorder]=useState("#888888");
+    const [padding,setPadding]=useState(20);
     // SECTION: Head
-    const [colorHead, setColorHead] = useState("#000000");
-    const [marginBottom, setMarginBottom] = useState(10);
+    const [colorHead,setColorHead]=useState("#000000");
+    const [marginBottom,setMarginBottom]=useState(10);
     // SECTION: Body
-    const [colorBody, setColorBody] = useState("#000000");
-    const [fontSize, setFontSize] = useState(16);
-    const [alignment, setAlignment] = useState('start');
+    const [colorBody,setColorBody]=useState("#000000");
+    const [fontSize,setFontSize]=useState(16);
+    const [alignment,setAlignment]=useState('start');
+
+    const [screenSize, setScreenSize] = useState(window.innerWidth);
+
+
+    useEffect(() => {
+        const updateDimension = () => {setScreenSize(window.innerWidth)}
+        window.addEventListener('resize', updateDimension);
+        return(() => {window.removeEventListener('resize', updateDimension);})
+    }, [screenSize])
+
+
+
+
+
 
     const theme=createTheme({
         palette:{
@@ -39,12 +60,6 @@ function App() {
                 contrastText:'#fff',
                 text:'#fff'
             },
-            test:{
-                light: '#ff7961',
-                main: '#f44336',
-                dark: '#ba000d',
-                contrastText: '#000',
-            }
         },
     });
 
@@ -58,43 +73,21 @@ function App() {
     ];
 
     // SECTION: Handle value updates
-    function handleChangeWidth(event,val){
-        setModalWidth(val);
-    }
-    function handleChangeBorderThickness(event,val){
-        setBorderThickness(val);
-    }
-    function handleChangeBorderRadius(event,val){
-        setBorderRadius(val);
-    }
-    function handleChangePadding(event,val){
-        setPadding(val);
-    }
-    function handleChangeMarginBottom(event,val){
-        setMarginBottom(val);
-    }
-    function handleChangeColorBackground(event,val){
-        setColorBackground(event.target.value);
-    }
-    function handleChangeColorBorder(event,val){
-        setColorBorder(event.target.value);
-    }
-    function handleChangeColorHead(event,val){
-        setColorHead(event.target.value);
-    }
-    function handleChangeColorBody(event,val){
-        setColorBody(event.target.value);
-    }
-    function handleChangeFontSize(event,val){
-        setFontSize(event.target.value);
-    }
-    function handleChangeAlignment(event,val){
-        // setAlignment(val);
-        if (val !== null) {
-            setAlignment(val);
-        }
-        // console.log(val);
-    }
+    function handleChangeBreakpoint(event,val) { setChooseBreakpoint(val); }
+    function handleChangeWidthLarge(event,val) { setModalWidthLarge(val); }
+    function handleChangeWidthMedium(event,val) { setModalWidthMedium(val); }
+    function handleChangeWidthSmall(event,val) { setModalWidthSmall(val); }
+    function handleChangeBorderThickness(event,val) { setBorderThickness(val); }
+    function handleChangeBorderRadius(event,val) { setBorderRadius(val); }
+    function handleChangePadding(event,val) { setPadding(val); }
+    function handleChangeMarginBottom(event,val) {setMarginBottom(val); }
+    // NOTE: color
+    function handleChangeColorBackground(event,val) { setColorBackground(event.target.value); }
+    function handleChangeColorBorder(event,val) { setColorBorder(event.target.value); }
+    function handleChangeColorHead(event,val) { setColorHead(event.target.value); }
+    function handleChangeColorBody(event,val) { setColorBody(event.target.value); }
+    function handleChangeFontSize(event,val) { setFontSize(event.target.value); }
+    function handleChangeAlignment(event,val) { setAlignment(val); }
     // SECTION: Handle value updates
 
 
@@ -120,7 +113,7 @@ function App() {
         padding:${padding} !important;
         border:${borderThickness}px solid ${colorBorder} !important;
         border-radius:${borderRadius}px !important;
-        width:50%;
+        width:${modalWidthLarge}%;
     }
     .modal_head {
         display:flex;
@@ -157,6 +150,16 @@ function App() {
         color:black;
         text-decoration:none;
         cursor:pointer;
+    }
+    @media only screen and (max-width: 767px) {
+        .modal_content {
+            width:${modalWidthSmall}%;
+        }
+    }
+    @media only screen and (min-width: 768px) and (max-width: 1023px) {
+        .modal_content {
+            width:${modalWidthMedium}%;
+        }
     }
 </style>`;
         code+=`
@@ -209,21 +212,22 @@ function App() {
 
     }
     function resetForm() {
-        console.log('reset form');
         // // SECTION: Basics
-        setModalWidth(50)
-        setColorBackground("#ffffff")
-        setBorderRadius(0)
-        setBorderThickness(1)
-        setColorBorder("#888888")
-        setPadding(20)
+        setModalWidthLarge(50);
+        setModalWidthSmall(90);
+        setModalWidthMedium(70);
+        setColorBackground("#ffffff");
+        setBorderRadius(0);
+        setBorderThickness(1);
+        setColorBorder("#888888");
+        setPadding(20);
         // // SECTION: Head
-        setColorHead("#000000")
-        setMarginBottom(10)
+        setColorHead("#000000");
+        setMarginBottom(10);
         // // SECTION: Body
-        setColorBody("#000000")
-        setFontSize(16)
-        setAlignment('start')
+        setColorBody("#000000");
+        setFontSize(16);
+        setAlignment('start');
 
         setTimeout(() => {
             setBtnText('copy');
@@ -233,11 +237,20 @@ function App() {
     // SECTION: update styles
     const styleBasics = {
         backgroundColor:colorBackground,
-        width:modalWidth+'%',
+        width:modalWidthLarge+'%',
         borderRadius:borderRadius,
         borderWidth:borderThickness,
         borderColor:colorBorder,
         padding:padding
+    };
+    const styleLarge = {
+        width:modalWidthLarge+'%',
+    };
+    const styleMedium = {
+        width:modalWidthMedium+'%',
+    };
+    const styleSmall = {
+        width:modalWidthSmall+'%',
     };
     const styleHead = {
         color:colorHead,
@@ -249,14 +262,44 @@ function App() {
         textAlign: alignment
     };
     // SECTION: update styles
+    
+    
+    // SECTION: breakpoints
+    let breakpointSettings;
+    switch (chooseBreakpoint) {
+        case 1024:
+            breakpointSettings = 
+            <div className="flex flex-col mb-2 gap-2">
+                <label className="" htmlFor="modalWidth">Width &#8805; 1024px</label>
+                <Slider aria-label="Width" value={modalWidthLarge} valueLabelDisplay="auto" step={1} min={25} max={100} onChange={handleChangeWidthLarge}/>
+            </div>;
+            break;
+        case 768:
+            breakpointSettings = <div className="flex flex-col mb-2 gap-2">
+                <label className="" htmlFor="modalWidth">Width &#8805; 768px</label>
+                <Slider aria-label="Width" value={modalWidthMedium} valueLabelDisplay="auto" step={1} min={25} max={100} onChange={handleChangeWidthMedium}/>
+            </div>;
+            break;
+        case 640:
+            breakpointSettings = <div className="flex flex-col mb-2 gap-2">
+                <label className="" htmlFor="modalWidth">Width &#8805; 640px</label>
+                <Slider aria-label="Width" value={modalWidthSmall} valueLabelDisplay="auto" step={1} min={25} max={100} onChange={handleChangeWidthSmall}/>
+            </div>;
+            break;
+        default:
+            breakpointSettings = <p>Choose width</p>;
+            break;
+    }
+    // SECTION: breakpoints
 
     return (
-        <div className='App font_change'>
+        <div className="App font_change flex flex-col h-screen">
             <ToastContainer position="bottom-right"/>
-            <div className="d-flex flex-column flex-xxl-row">
-                <div className='col-12 col-xxl-10 modal_background'>
-                    <h1 className="display-1 text-center">Easy Modal Design</h1>
-                        <div style={styleBasics} id="modal_content" className="modal_content">
+            <div className="flex flex-col 2xl:flex-row bsasis-full">
+                <div className="flex flex-col w-full 2xl:w-5/6 modal_background">
+                    <h1 className="text-6xl self-center">Easy Modal Design</h1>
+                        <div style={styleBasics, ((screenSize>=1024)?styleLarge:(screenSize>=768)?styleMedium:styleSmall)} id="modal_content" className="modal_content">
+                        {/* <div style={styleBasics} id="modal_content" className="modal_content"> */}
                             <div style={styleHead} id="modal_head" className="modal_head">
                                 <h2>Modal Design Made Easy</h2>
                                 <span id="closeModalBtn" className="close">&times;</span>
@@ -271,101 +314,113 @@ function App() {
                             </div>
                         </div>
                 </div>
-                <div className="d-flex col-12 justify-content-center align-self-center col-xxl-2 full_height p-2">
-                    <form className="col-12 col-xl-10 col-xxl-12 rounded rounded-xxl-0 rounded-bottom cssForm">
-                        <div className="d-flex flex-column flex-md-row flex-xxl-column h-scroll">
+                <div className="flex flex-col _items-center w-full xl:w-5/6 2xl:w-1/6 self-center _justify-center p-2">
+                    <form className="w-full rounded cssForm">
+                        <div className="flex flex-col md:flex-row 2xl:flex-col overflow-x-auto">
                             {/* SECTION: GENERAL */}
-                            <div className="col-12 col-md-4 col-xxl-12 p-3">
-                                <div className="d-flex flex-row align-items-center">
-                                    <h2 className="col">Basics</h2>
+                            <div className="w-full md:w-1/3 2xl:w-full p-5">
+                                <div className="mb-1">
+                                    <h2 className="text-xl">Basics</h2>
                                 </div>
-                                <div id="collapse_basics" className="">
-                                    <div className="mb-2">
-                                        <label className="form-label" htmlFor="modalWidth">Width</label>
-                                        <Slider aria-label="Width" value={modalWidth} valueLabelDisplay="auto" step={1} min={25} max={100} onChange={handleChangeWidth}/>
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex flex-col mb-2 gap-2">
+                                        <label className="" htmlFor="modalWidth">Breakpoint</label>
+                                        <ThemeProvider theme={theme}>
+                                        <ToggleButtonGroup className="text_align_input w-full" value={chooseBreakpoint} exclusive color="neutral" onChange={handleChangeBreakpoint} aria-label="text alignment">
+                                            <ToggleButton className="w-1/3" value={1024} aria-label="right aligned">large</ToggleButton>
+                                            <ToggleButton className="w-1/3" value={768} aria-label="centered">medium</ToggleButton>
+                                            <ToggleButton className="w-1/3" value={640} aria-label="left alsigned">small</ToggleButton>
+                                        </ToggleButtonGroup>
+                                        </ThemeProvider>
                                     </div>
-                                    <div className="mb-2">
-                                        <label className="form-label" htmlFor="backgroundColorInput">Background</label>
-                                        <input type="color" className="form-control form-control-color" value={colorBackground} onChange={handleChangeColorBackground}/>
+                                    {breakpointSettings}
+                                    {/* <div className="flex flex-col mb-2 gap-2">
+                                        <label className="" htmlFor="modalWidth">Width</label>
+                                        <Slider aria-label="Width" value={modalWidthLarge} valueLabelDisplay="auto" step={1} min={25} max={100} onChange={handleChangeWidthLarge}/>
+                                    </div> */}
+                                    <div className="flex flex-col mb-2 gap-2">
+                                        <label className="" htmlFor="backgroundColorInput">Background</label>
+                                        <input type="color" className="rounded h-8" value={colorBackground} onChange={handleChangeColorBackground}/>
                                     </div>
-                                    <div className="mb-2">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="borderRadiusInput">Round corners</label>
                                         <Slider aria-label="Width" value={borderRadius} valueLabelDisplay="auto" step={1} min={0} max={100} onChange={handleChangeBorderRadius}/>
                                     </div>
-                                    <div className="mb-2">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="borderPixelInput">Border thickness</label>
                                         <Slider aria-label="Width" value={borderThickness} valueLabelDisplay="auto" step={1} min={0} max={30} onChange={handleChangeBorderThickness}/>
                                     </div>
-                                    <div className="mb-2">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="colorBorder">Border color</label>
-                                        <input type="color" className="form-control form-control-color" value={colorBorder} onChange={handleChangeColorBorder}/>
+                                        <input type="color" className="rounded h-8" value={colorBorder} onChange={handleChangeColorBorder} />
                                     </div>
-                                    <div className="mb-2">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="paddingInput">Padding</label>
-                                        <Slider aria-label="Width" value={padding} valueLabelDisplay="auto" step={1} min={0} max={200} onChange={handleChangePadding}/>
+                                        <Slider aria-label="Width" value={padding} valueLabelDisplay="auto" step={1} min={0} max={200} onChange={handleChangePadding} />
                                     </div>
                                 </div>
                             </div>
                             {/* SECTION: HEADER */}
-                            <div className="col-12 col-md-4 col-xxl-12 p-3">
-                                <div className="d-flex flex-row align-items-center">
-                                    <h2 className="col">Header</h2>
+                            <div className="w-full md:w-1/3 2xl:w-full p-5">
+                                <div className="mb-1">
+                                    <h2 className="text-xl">Header</h2>
                                 </div>
-                                <div id="collapse_header" className="">
-                                    <div className="mb-3">
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="colorHead">Text color</label>
-                                        <input type="color" className="form-control form-control-color" value={colorHead} onChange={handleChangeColorHead}/>
+                                        <input type="color" className="rounded h-8" value={colorHead} onChange={handleChangeColorHead} />
                                     </div>
-                                    <div className="mb-2">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="marginBottomHead">margin bottom</label>
-                                        <Slider aria-label="Width" value={marginBottom} valueLabelDisplay="auto" step={1} min={0} max={100} onChange={handleChangeMarginBottom}/>
+                                        <Slider aria-label="Width" value={marginBottom} valueLabelDisplay="auto" step={1} min={0} max={100} onChange={handleChangeMarginBottom} />
                                     </div>
                                 </div>
                             </div>
                             {/* SECTION: BODY */}
-                            <div className="col-12 col-md-4 col-xxl-12 p-3 mbs-1">
-                                <div className="d-flex flex-row align-items-center">
-                                    <h2 className="col">Body</h2>
+                            <div className="w-full md:w-1/3 2xl:w-full p-5">
+                                <div className="mb-1">
+                                    <h2 className="text-xl">Body</h2>
                                 </div>
-                                <div id="collapse_body" className="">
-                                    <div className="mb-3">
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="colorBody">Text color</label>
-                                        <input type="color" className="form-control form-control-color" value={colorBody} onChange={handleChangeColorBody}/>
+                                        <input type="color" className="rounded h-8" value={colorBody} onChange={handleChangeColorBody} />
                                     </div>
-                                    <div className="mb-3">
+                                    <div className="flex flex-col mb-2 gap-2">
                                         <label className="form-label" htmlFor="fontSizeBody">Font size</label>
-                                        <input type="number" className="form-control" id="fontSizeBody" name="fontSizeBody" min={1} max={100} value={fontSize} onChange={handleChangeFontSize}/>
+                                        <input type="number" className="p-2 rounded text-black" id="fontSizeBody" name="fontSizeBody" min={1} max={100} value={fontSize} onChange={handleChangeFontSize} />
                                     </div>
                                     <div>
-                                        <label className="form-label" htmlFor="fontAlign">Text align</label><br/>
+                                        <label className="form-label" htmlFor="fontAlign">Text align</label><br />
                                         <ThemeProvider theme={theme}>
-                                            <ToggleButtonGroup className="text_align_input col-12" value={alignment} exclusive color="neutral" onChange={handleChangeAlignment} aria-label="text alignment">
-                                                <ToggleButton className="col-3" value="start" aria-label="left aligned"><FormatAlignLeftIcon /></ToggleButton>
-                                                <ToggleButton className="col-3" value="center" aria-label="centered"><FormatAlignCenterIcon /></ToggleButton>
-                                                <ToggleButton className="col-3" value="end" aria-label="right aligned"><FormatAlignRightIcon /></ToggleButton>
-                                                <ToggleButton className="col-3" value="justify" aria-label="justified"><FormatAlignJustifyIcon /></ToggleButton>
-                                            </ToggleButtonGroup>
+                                        <ToggleButtonGroup className="text_align_input w-full" value={alignment} exclusive color="neutral" onChange={handleChangeAlignment} aria-label="text alignment">
+                                            <ToggleButton className="w-full" value="start" aria-label="left aligned"><FormatAlignLeftIcon /></ToggleButton>
+                                            <ToggleButton className="w-full" value="center" aria-label="centered"><FormatAlignCenterIcon /></ToggleButton>
+                                            <ToggleButton className="w-full" value="end" aria-label="right aligned"><FormatAlignRightIcon /></ToggleButton>
+                                            <ToggleButton className="w-full" value="justify" aria-label="justified"><FormatAlignJustifyIcon /></ToggleButton>
+                                        </ToggleButtonGroup>
                                         </ThemeProvider>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="d-flex justify-content-between text-center m-3">
-                            <button id="copy_btn" type="button" onClick={copyCode} className="btn btn-success">{btnText}</button>
-                            <input type="reset" value="Reset" onClick={resetForm} className="btn btn-danger" />
+                        <div className="flex justify-between items-center text-center m-3">
+                            <button type="button" onClick={copyCode} className="text-green-500 border border-green-500 rounded px-4 py-2 hover:bg-green-500 hover:text-white transition duration-150 ease-linear">{btnText}</button>
+                            <button type="button" onClick={resetForm} className="text-red-500 border border-red-500 rounded px-4 py-2 hover:bg-red-500 hover:text-white transition duration-150 ease-linear">Reset</button>
                         </div>
-                        <div className="d-flex justify-content-center text-center mb-3 ">
-                            <a href="https://donate.stripe.com/dR66q0b9D3A4g8MfZ0" rel="noreferrer" target='_blank' className="btn btn-primary w-xxl-100">Support me 🙌</a>
+                        <div className="flex justify-center items-center mb-3 ">
+                            <a href="https://donate.stripe.com/dR66q0b9D3A4g8MfZ0" rel="noreferrer" target='_blank' className="text-white border border-blue-500 rounded px-4 py-2 bg-blue-500">Support me 🙌</a>
                         </div>
-
                     </form>
                 </div>
             </div>
-            <footer className="footer mt-auto">
-                <div className="d-flex flex-column align-items-center flex-wrap rounded-top footer_background p-1">
+
+            <footer className="mt-auto">
+                <div className="flex flex-col items-center flex-wrap rounded-t footer_background p-4">
                     <p className='col-10 col-md-6 col-lg-5 col-xl-4 col-xxl-3 text-center footer_text'>Disclaimer: All functions are subject to copyright and may not be redistributed without the written consent of <a className="footer_link" href="https://twitter.com/jonaskaatz" rel="noreferrer" target='_blank'>@jonaskaatz</a></p>
                 </div>
             </footer>
+
             <a className="p-2 twitter_tag footer_text" href="https://twitter.com/jonaskaatz" rel="noreferrer" target='_blank'>@jonaskaatz</a>
         </div>
     );
