@@ -40,13 +40,23 @@ function App() {
     const [alignment,setAlignment]=useState('start');
 
     const [screenSize, setScreenSize] = useState(window.innerWidth);
+    const [addStyle, setAddStyle] = useState();
 
 
     useEffect(() => {
         const updateDimension = () => {setScreenSize(window.innerWidth)}
         window.addEventListener('resize', updateDimension);
+        if (screenSize>=1024){
+            setAddStyle({width:modalWidthLarge+'%'});
+        }
+        else if (screenSize>=768){
+            setAddStyle({width:modalWidthMedium+'%'});
+        }
+        else {
+            setAddStyle({width:modalWidthSmall+'%'});
+        }
         return(() => {window.removeEventListener('resize', updateDimension);})
-    }, [screenSize])
+    }, [screenSize,modalWidthLarge,modalWidthMedium,modalWidthSmall])
 
 
 
@@ -243,15 +253,15 @@ function App() {
         borderColor:colorBorder,
         padding:padding
     };
-    const styleLarge = {
-        width:modalWidthLarge+'%',
-    };
-    const styleMedium = {
-        width:modalWidthMedium+'%',
-    };
-    const styleSmall = {
-        width:modalWidthSmall+'%',
-    };
+    // const styleLarge = {
+    //     width:modalWidthLarge+'%',
+    // };
+    // const styleMedium = {
+    //     width:modalWidthMedium+'%',
+    // };
+    // const styleSmall = {
+    //     width:modalWidthSmall+'%',
+    // };
     const styleHead = {
         color:colorHead,
         marginBottom:marginBottom
@@ -298,7 +308,8 @@ function App() {
             <div className="flex flex-col 2xl:flex-row bsasis-full">
                 <div className="flex flex-col w-full 2xl:w-5/6 modal_background">
                     <h1 className="text-6xl self-center">Easy Modal Design</h1>
-                        <div style={styleBasics, ((screenSize>=1024)?styleLarge:(screenSize>=768)?styleMedium:styleSmall)} id="modal_content" className="modal_content">
+                        <div style={{...styleBasics,...addStyle}} id="modal_content" className="modal_content">
+                        {/* <div style={styleBasics, ((screenSize>=1024)?styleLarge:(screenSize>=768)?styleMedium:styleSmall)} id="modal_content" className="modal_content"> */}
                         {/* <div style={styleBasics} id="modal_content" className="modal_content"> */}
                             <div style={styleHead} id="modal_head" className="modal_head">
                                 <h2>Modal Design Made Easy</h2>
