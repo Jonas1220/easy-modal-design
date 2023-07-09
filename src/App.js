@@ -83,7 +83,7 @@ function App() {
     ];
 
     // SECTION: Handle value updates
-    function handleChangeBreakpoint(event,val) { setChooseBreakpoint(val); }
+    function handleChangeBreakpoint(event,val) { if (val !== null) setChooseBreakpoint(val); }
     function handleChangeWidthLarge(event,val) { setModalWidthLarge(val); }
     function handleChangeWidthMedium(event,val) { setModalWidthMedium(val); }
     function handleChangeWidthSmall(event,val) { setModalWidthSmall(val); }
@@ -97,7 +97,7 @@ function App() {
     function handleChangeColorHead(event,val) { setColorHead(event.target.value); }
     function handleChangeColorBody(event,val) { setColorBody(event.target.value); }
     function handleChangeFontSize(event,val) { setFontSize(event.target.value); }
-    function handleChangeAlignment(event,val) { setAlignment(val); }
+    function handleChangeAlignment(event,val) { if (val !== null) setAlignment(val); }
     // SECTION: Handle value updates
 
 
@@ -253,15 +253,6 @@ function App() {
         borderColor:colorBorder,
         padding:padding
     };
-    // const styleLarge = {
-    //     width:modalWidthLarge+'%',
-    // };
-    // const styleMedium = {
-    //     width:modalWidthMedium+'%',
-    // };
-    // const styleSmall = {
-    //     width:modalWidthSmall+'%',
-    // };
     const styleHead = {
         color:colorHead,
         marginBottom:marginBottom
@@ -303,16 +294,14 @@ function App() {
     // SECTION: breakpoints
 
     return (
-        <div className="App font_change flex flex-col h-screen">
+        <div className="App flex flex-col h-screen">
             <ToastContainer position="bottom-right"/>
             <div className="flex flex-col 2xl:flex-row bsasis-full">
                 <div className="flex flex-col w-full 2xl:w-5/6 modal_background">
-                    <h1 className="text-6xl self-center">Easy Modal Design</h1>
+                    <h1 className="text-6xl mt-4 self-center font_change">Easy Modal Design</h1>
                         <div style={{...styleBasics,...addStyle}} id="modal_content" className="modal_content">
-                        {/* <div style={styleBasics, ((screenSize>=1024)?styleLarge:(screenSize>=768)?styleMedium:styleSmall)} id="modal_content" className="modal_content"> */}
-                        {/* <div style={styleBasics} id="modal_content" className="modal_content"> */}
                             <div style={styleHead} id="modal_head" className="modal_head">
-                                <h2>Modal Design Made Easy</h2>
+                                <h2 className="text-3xl font-medium mb-2">Modal Design Made Easy</h2>
                                 <span id="closeModalBtn" className="close">&times;</span>
                             </div>
                             <div style={styleBody} id="modal_body" className="modal_body">
@@ -325,20 +314,20 @@ function App() {
                             </div>
                         </div>
                 </div>
-                <div className="flex flex-col _items-center w-full xl:w-5/6 2xl:w-1/6 self-center _justify-center p-2">
+                <div className="flex flex-col _items-center w-full xl:w-5/6 2xl:w-1/6 self-center p-2 font_change">
                     <form className="w-full rounded cssForm">
                         <div className="flex flex-col md:flex-row 2xl:flex-col overflow-x-auto">
                             {/* SECTION: GENERAL */}
                             <div className="w-full md:w-1/3 2xl:w-full p-5">
                                 <div className="mb-1">
-                                    <h2 className="text-xl">Basics</h2>
+                                    <h2 className="text-2xl">Basics</h2>
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <div className="flex flex-col mb-2 gap-2">
                                         <label className="" htmlFor="modalWidth">Breakpoint</label>
                                         <ThemeProvider theme={theme}>
-                                        <ToggleButtonGroup className="text_align_input w-full" value={chooseBreakpoint} exclusive color="neutral" onChange={handleChangeBreakpoint} aria-label="text alignment">
-                                            <ToggleButton className="w-1/3" value={1024} aria-label="right aligned">large</ToggleButton>
+                                        <ToggleButtonGroup className="text_align_input w-full" value={chooseBreakpoint} exclusive color="neutral" onChange={handleChangeBreakpoint} aria-label="breakpoint" size="small">
+                                            <ToggleButton className="w-1/3 text-xs" value={1024} aria-label="right aligned">large</ToggleButton>
                                             <ToggleButton className="w-1/3" value={768} aria-label="centered">medium</ToggleButton>
                                             <ToggleButton className="w-1/3" value={640} aria-label="left alsigned">small</ToggleButton>
                                         </ToggleButtonGroup>
@@ -374,7 +363,7 @@ function App() {
                             {/* SECTION: HEADER */}
                             <div className="w-full md:w-1/3 2xl:w-full p-5">
                                 <div className="mb-1">
-                                    <h2 className="text-xl">Header</h2>
+                                    <h2 className="text-2xl">Header</h2>
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <div className="flex flex-col mb-2 gap-2">
@@ -390,7 +379,7 @@ function App() {
                             {/* SECTION: BODY */}
                             <div className="w-full md:w-1/3 2xl:w-full p-5">
                                 <div className="mb-1">
-                                    <h2 className="text-xl">Body</h2>
+                                    <h2 className="text-2xl">Body</h2>
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <div className="flex flex-col mb-2 gap-2">
@@ -404,7 +393,7 @@ function App() {
                                     <div>
                                         <label className="form-label" htmlFor="fontAlign">Text align</label><br />
                                         <ThemeProvider theme={theme}>
-                                        <ToggleButtonGroup className="text_align_input w-full" value={alignment} exclusive color="neutral" onChange={handleChangeAlignment} aria-label="text alignment">
+                                        <ToggleButtonGroup className="text_align_input w-full" value={alignment} exclusive color="neutral" onChange={handleChangeAlignment} aria-label="text alignment" size="small">
                                             <ToggleButton className="w-full" value="start" aria-label="left aligned"><FormatAlignLeftIcon /></ToggleButton>
                                             <ToggleButton className="w-full" value="center" aria-label="centered"><FormatAlignCenterIcon /></ToggleButton>
                                             <ToggleButton className="w-full" value="end" aria-label="right aligned"><FormatAlignRightIcon /></ToggleButton>
