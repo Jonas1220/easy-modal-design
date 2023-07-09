@@ -18,7 +18,8 @@ body {
 	z-index:99;
 }
 .body_background {
-	background-color:#232323;
+	/* background-color:#232323; */
+	background-color:#1C3;
 	background:-webkit-linear-gradient(to right,#ef8e38,#108dc7); 
 	background:linear-gradient(to right,#ef8e38,#108dc7); 
 }
