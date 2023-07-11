@@ -11,13 +11,6 @@ import {createTheme,ThemeProvider} from '@mui/material/styles';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// import {Stripe} from 'stripe';
-// const stripe = Stripe('sk_test_51NPT4wIDg5lCMJRBAXalOyqsipxOSggg9jtim3xHpJSD8J9kGDyroZ3YJPE12TWTh9jeyLTXoVrud3vAGw5VJbcK00VO0Qaaqm');
-/*
-'sm': '640px',
-'md': '768px',
-'lg': '1024px',
-*/
 
 function App() {
     const [btnText,setBtnText]=useState('copy');
@@ -334,10 +327,6 @@ function App() {
                                         </ThemeProvider>
                                     </div>
                                     {breakpointSettings}
-                                    {/* <div className="flex flex-col mb-2 gap-2">
-                                        <label className="" htmlFor="modalWidth">Width</label>
-                                        <Slider aria-label="Width" value={modalWidthLarge} valueLabelDisplay="auto" step={1} min={25} max={100} onChange={handleChangeWidthLarge}/>
-                                    </div> */}
                                     <div className="flex flex-col mb-2 gap-2">
                                         <label className="" htmlFor="backgroundColorInput">Background</label>
                                         <input type="color" className="rounded h-8" value={colorBackground} onChange={handleChangeColorBackground}/>
